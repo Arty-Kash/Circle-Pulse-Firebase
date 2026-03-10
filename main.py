@@ -24,7 +24,7 @@ def get_color_data():
     # Format as a hex color string
     color = f'#{red:02x}{green:02x}{blue:02x}'
 
-    return jsonify(color=color)
+    return jsonify(color=color, timestamp=current_time)
 
 def main():
     app.run(port=int(os.environ.get('PORT', 80)))

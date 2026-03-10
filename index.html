@@ -26,7 +26,7 @@
 </head>
 <body>
     <h1>Circle Image</h1>
-    <svg width="250" height="100">
+    <svg width="450" height="100">
         <circle id="my-circle" cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="blue" />
     </svg>
     
@@ -38,59 +38,71 @@
     <script>
         const circle = document.getElementById('my-circle');
         const button = document.getElementById('toggle-button');
-        const uploadButton = document.getElementById('upload-button'); // Get the upload button
+        const uploadButton = document.getElementById('upload-button');
 
-        // "Hello World" テキスト要素を作成し、SVGに追加します
+        // テキスト要素を作成し、SVGに追加します
         const svg = document.querySelector('svg');
-        svg.setAttribute('width', '250');
+        svg.setAttribute('width', '450'); // Increase width to fit formatted timestamp
         const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         textElement.setAttribute('x', 110);
         textElement.setAttribute('y', 55);
-        textElement.setAttribute('fill', 'red'); // 初期色を赤に設定
-        textElement.textContent = 'Hello World';
+        textElement.setAttribute('fill', 'black');
+        textElement.textContent = 'Fetching data...'; // Initial text
         svg.appendChild(textElement);
 
         // --- Circle Animation Control ---
-        // アニメーションが現在実行中かどうかを追跡します
         let isAnimating = true;
-
-        // ボタンがクリックされたときの処理
         button.addEventListener('click', () => {
             if (isAnimating) {
-                // アニメーションを一時停止し、ボタンのテキストを「Start」に変更
                 circle.style.animationPlayState = 'paused';
                 button.textContent = 'Start';
             } else {
-                // アニメーションを再生し、ボタンのテキストを「Stop」に変更
                 circle.style.animationPlayState = 'running';
                 button.textContent = 'Stop';
             }
-            // 状態を反転させます
             isAnimating = !isAnimating;
         });
         
-        // --- Text Color Animation Control ---
-        let isTextColorAnimating = true;
+        // --- Text Data Fetching Control ---
+        let isFetching = true;
         uploadButton.textContent = 'Stop'; // Set initial text
 
         uploadButton.addEventListener('click', () => {
-            if (isTextColorAnimating) {
+            if (isFetching) {
                 uploadButton.textContent = 'Start';
             } else {
                 uploadButton.textContent = 'Stop';
             }
-            isTextColorAnimating = !isTextColorAnimating;
+            isFetching = !isFetching;
         });
 
-        // 1秒ごとに実行されるタイマーで文字色を変更します
+        // 1秒ごとに実行されるタイマーで色データを取得し、表示します
         setInterval(() => {
-            if (isTextColorAnimating) {
-                // 現在の文字色を取得します
-                const currentColor = textElement.getAttribute('fill');
-                // 現在の色に応じて、新しい色を決定します (赤なら黒、黒なら赤)
-                const newColor = (currentColor === 'red') ? 'black' : 'red';
-                // 文字色を新しい色に設定します
-                textElement.setAttribute('fill', newColor);
+            if (isFetching) {
+                fetch('/api/color_data')
+                    .then(response => response.json())
+                    .then(data => {
+                        // 'data' will be like { color: '#abcdef', timestamp: 12345.678 }
+                        const timestamp = data.timestamp;
+
+                        // Convert UNIX timestamp (seconds) to a readable format
+                        // Note: JavaScript Date constructor expects milliseconds, so we multiply by 1000
+                        const date = new Date(timestamp * 1000);
+                        const year = date.getFullYear();
+                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                        const day = date.getDate().toString().padStart(2, '0');
+                        const hours = date.getHours().toString().padStart(2, '0');
+                        const minutes = date.getMinutes().toString().padStart(2, '0');
+                        const seconds = date.getSeconds().toString().padStart(2, '0');
+
+                        const formattedDate = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+
+                        textElement.textContent = `${data.color} ${formattedDate}`;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching color data:', error);
+                        textElement.textContent = 'Error!';
+                    });
             }
         }, 1000); // 1000ミリ秒 = 1秒
 
