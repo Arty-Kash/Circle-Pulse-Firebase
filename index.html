@@ -26,11 +26,14 @@
 </head>
 <body>
     <h1>Circle Image</h1>
-    <svg width="100" height="100">
+    <svg width="250" height="100">
         <circle id="my-circle" cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="blue" />
     </svg>
-    <br>
-    <button id="toggle-button">Stop</button>
+    
+    <div style="position: relative; height: 40px; margin-top: 5px;">
+        <button id="toggle-button" style="position: absolute; left: 25px;">Stop</button>
+        <button id="upload-button" style="position: absolute; left: 110px;">Upload</button>
+    </div>
 
     <script>
         const circle = document.getElementById('my-circle');
@@ -53,6 +56,24 @@
             // 状態を反転させます
             isAnimating = !isAnimating;
         });
+
+        // 1秒ごとに実行されるタイマーを設定します
+        setInterval(() => {
+            // この中は1秒ごとに実行されますが、現在は何も処理を記述していません。
+        }, 1000); // 1000ミリ秒 = 1秒
+
+        // "Hello World" テキストを円の横に追加します
+        const svg = document.querySelector('svg');
+
+        // テキストを表示するためのスペースを確保するために、SVGの幅を調整します
+        svg.setAttribute('width', '250');
+
+        const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textElement.setAttribute('x', 110); // 円の右側に配置します
+        textElement.setAttribute('y', 55);  // 円の中心と垂直方向の位置を合わせます
+        textElement.setAttribute('fill', 'red'); // 文字色を赤に設定します
+        textElement.textContent = 'Hello World';
+        svg.appendChild(textElement);
     </script>
 </body>
 </html>
