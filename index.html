@@ -38,6 +38,7 @@
     <script>
         const circle = document.getElementById('my-circle');
         const button = document.getElementById('toggle-button');
+        const uploadButton = document.getElementById('upload-button'); // Get the upload button
 
         // "Hello World" テキスト要素を作成し、SVGに追加します
         const svg = document.querySelector('svg');
@@ -49,6 +50,7 @@
         textElement.textContent = 'Hello World';
         svg.appendChild(textElement);
 
+        // --- Circle Animation Control ---
         // アニメーションが現在実行中かどうかを追跡します
         let isAnimating = true;
 
@@ -66,15 +68,30 @@
             // 状態を反転させます
             isAnimating = !isAnimating;
         });
+        
+        // --- Text Color Animation Control ---
+        let isTextColorAnimating = true;
+        uploadButton.textContent = 'Stop'; // Set initial text
+
+        uploadButton.addEventListener('click', () => {
+            if (isTextColorAnimating) {
+                uploadButton.textContent = 'Start';
+            } else {
+                uploadButton.textContent = 'Stop';
+            }
+            isTextColorAnimating = !isTextColorAnimating;
+        });
 
         // 1秒ごとに実行されるタイマーで文字色を変更します
         setInterval(() => {
-            // 現在の文字色を取得します
-            const currentColor = textElement.getAttribute('fill');
-            // 現在の色に応じて、新しい色を決定します (赤なら黒、黒なら赤)
-            const newColor = (currentColor === 'red') ? 'black' : 'red';
-            // 文字色を新しい色に設定します
-            textElement.setAttribute('fill', newColor);
+            if (isTextColorAnimating) {
+                // 現在の文字色を取得します
+                const currentColor = textElement.getAttribute('fill');
+                // 現在の色に応じて、新しい色を決定します (赤なら黒、黒なら赤)
+                const newColor = (currentColor === 'red') ? 'black' : 'red';
+                // 文字色を新しい色に設定します
+                textElement.setAttribute('fill', newColor);
+            }
         }, 1000); // 1000ミリ秒 = 1秒
 
     </script>
