@@ -38,7 +38,17 @@
     <script>
         const circle = document.getElementById('my-circle');
         const button = document.getElementById('toggle-button');
-        
+
+        // "Hello World" テキスト要素を作成し、SVGに追加します
+        const svg = document.querySelector('svg');
+        svg.setAttribute('width', '250');
+        const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textElement.setAttribute('x', 110);
+        textElement.setAttribute('y', 55);
+        textElement.setAttribute('fill', 'red'); // 初期色を赤に設定
+        textElement.textContent = 'Hello World';
+        svg.appendChild(textElement);
+
         // アニメーションが現在実行中かどうかを追跡します
         let isAnimating = true;
 
@@ -57,23 +67,16 @@
             isAnimating = !isAnimating;
         });
 
-        // 1秒ごとに実行されるタイマーを設定します
+        // 1秒ごとに実行されるタイマーで文字色を変更します
         setInterval(() => {
-            // この中は1秒ごとに実行されますが、現在は何も処理を記述していません。
+            // 現在の文字色を取得します
+            const currentColor = textElement.getAttribute('fill');
+            // 現在の色に応じて、新しい色を決定します (赤なら黒、黒なら赤)
+            const newColor = (currentColor === 'red') ? 'black' : 'red';
+            // 文字色を新しい色に設定します
+            textElement.setAttribute('fill', newColor);
         }, 1000); // 1000ミリ秒 = 1秒
 
-        // "Hello World" テキストを円の横に追加します
-        const svg = document.querySelector('svg');
-
-        // テキストを表示するためのスペースを確保するために、SVGの幅を調整します
-        svg.setAttribute('width', '250');
-
-        const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        textElement.setAttribute('x', 110); // 円の右側に配置します
-        textElement.setAttribute('y', 55);  // 円の中心と垂直方向の位置を合わせます
-        textElement.setAttribute('fill', 'red'); // 文字色を赤に設定します
-        textElement.textContent = 'Hello World';
-        svg.appendChild(textElement);
     </script>
 </body>
 </html>
