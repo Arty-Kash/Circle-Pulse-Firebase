@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Circle</title>
+    <style>
+        #my-circle {
+            /* 4秒かけて無限にアニメーションを繰り返します */
+            animation: color-change 4s infinite;
+        }
+
+        @keyframes color-change {
+            /* アニメーションの開始時（0%）と終了時（100%）は青色 */
+            0% {
+                fill: blue;
+            }
+            /* アニメーションの中間（50%）で赤色に変化 */
+            50% {
+                fill: red;
+            }
+            /* 終了時に再び青色に戻ります */
+            100% {
+                fill: blue;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Circle Image</h1>
+    <svg width="100" height="100">
+        <circle id="my-circle" cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="blue" />
+    </svg>
+    <br>
+    <button id="toggle-button">Stop</button>
+
+    <script>
+        const circle = document.getElementById('my-circle');
+        const button = document.getElementById('toggle-button');
+        
+        // アニメーションが現在実行中かどうかを追跡します
+        let isAnimating = true;
+
+        // ボタンがクリックされたときの処理
+        button.addEventListener('click', () => {
+            if (isAnimating) {
+                // アニメーションを一時停止し、ボタンのテキストを「Start」に変更
+                circle.style.animationPlayState = 'paused';
+                button.textContent = 'Start';
+            } else {
+                // アニメーションを再生し、ボタンのテキストを「Stop」に変更
+                circle.style.animationPlayState = 'running';
+                button.textContent = 'Stop';
+            }
+            // 状態を反転させます
+            isAnimating = !isAnimating;
+        });
+    </script>
+</body>
+</html>
