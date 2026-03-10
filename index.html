@@ -28,6 +28,7 @@
     <h1>Circle Image</h1>
     <svg width="450" height="100">
         <circle id="my-circle" cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="blue" />
+        <rect id="my-rectangle" x="110" y="10" width="40" height="40" fill="green" />
     </svg>
     
     <div style="position: relative; height: 40px; margin-top: 5px;">
@@ -37,6 +38,7 @@
 
     <script>
         const circle = document.getElementById('my-circle');
+        const rectangle = document.getElementById('my-rectangle');
         const button = document.getElementById('toggle-button');
         const uploadButton = document.getElementById('upload-button');
 
@@ -45,7 +47,7 @@
         svg.setAttribute('width', '450'); // Increase width to fit formatted timestamp
         const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         textElement.setAttribute('x', 110);
-        textElement.setAttribute('y', 55);
+        textElement.setAttribute('y', 75);
         textElement.setAttribute('fill', 'black');
         textElement.textContent = 'Fetching data...'; // Initial text
         svg.appendChild(textElement);
@@ -84,6 +86,9 @@
                     .then(data => {
                         // 'data' will be like { color: '#abcdef', timestamp: 12345.678 }
                         const timestamp = data.timestamp;
+
+                        // Update rectangle color
+                        rectangle.setAttribute('fill', data.color);
 
                         // Convert UNIX timestamp (seconds) to a readable format
                         // Note: JavaScript Date constructor expects milliseconds, so we multiply by 1000
